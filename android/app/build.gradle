@@ -78,12 +78,16 @@ android {
     compileSdk rootProject.ext.compileSdkVersion
 
     namespace "com.rnparryhotterkiosk"
+
     defaultConfig {
         applicationId "com.rnparryhotterkiosk"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+        // Configuration pour react-native-camera : utiliser 'general' au lieu de 'mlkit'
+        missingDimensionStrategy 'react-native-camera', 'general'
     }
     signingConfigs {
         debug {
@@ -103,6 +107,19 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+
+            // Optimisations pour APK
+            shrinkResources enableProguardInReleaseBuilds
+        }
+    }
+
+    // Splits APK par architecture pour réduire la taille
+    splits {
+        abi {
+            reset()
+            enable true
+            universalApk false
+            include "armeabi-v8a", "arm64-v8a", "x86", "x86_64"
         }
     }
 }
