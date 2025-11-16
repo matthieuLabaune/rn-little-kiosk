@@ -34,7 +34,7 @@ function App() {
   );
   const [isVideoActive, setIsVideoActive] = useState(false);
   const [lastMotionTime, setLastMotionTime] = useState<number>(0);
-  
+
   // Hook de rotation des vidéos
   const {getCurrentVideo, getNextVideo} = useVideoRotation(settings);
   const [currentVideo, setCurrentVideo] = useState(getCurrentVideo());

@@ -17,11 +17,11 @@ export function useNativeMotionDetection(sensitivity: number = 50, enabled: bool
     }
 
     const eventEmitter = new NativeEventEmitter(MotionDetector);
-    
+
     // Écouter les événements de mouvement
     const motionSubscription = eventEmitter.addListener('onMotionDetected', () => {
       setHasMotion(true);
-      
+
       // Réinitialiser après 3 secondes
       setTimeout(() => {
         setHasMotion(false);

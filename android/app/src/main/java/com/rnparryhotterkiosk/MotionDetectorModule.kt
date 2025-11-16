@@ -36,14 +36,14 @@ class MotionDetectorModule(reactContext: ReactApplicationContext) :
     @ReactMethod
     fun startDetection(sens: Int) {
         Log.d(TAG, "startDetection called with sensitivity: $sens")
-        
+
         if (isDetecting) {
             Log.d(TAG, "Already detecting, ignoring")
             return
         }
 
         sensitivity = sens
-        
+
         // Vérifier la permission caméra
         if (ActivityCompat.checkSelfPermission(
                 reactApplicationContext,
@@ -153,7 +153,7 @@ class MotionDetectorModule(reactContext: ReactApplicationContext) :
     private fun createCaptureSession() {
         try {
             val surface = imageReader?.surface ?: return
-            
+
             val captureRequestBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)?.apply {
                 addTarget(surface)
             }
@@ -165,7 +165,7 @@ class MotionDetectorModule(reactContext: ReactApplicationContext) :
                         Log.d(TAG, "Capture session configured")
                         captureSession = session
                         isDetecting = true
-                        
+
                         try {
                             // Démarrer la capture en continu
                             captureRequestBuilder?.let {
@@ -200,7 +200,7 @@ class MotionDetectorModule(reactContext: ReactApplicationContext) :
             val buffer: ByteBuffer = image.planes[0].buffer
             var brightness: Long = 0
             val sampleSize = 100.coerceAtMost(buffer.remaining())
-            
+
             for (i in 0 until sampleSize) {
                 brightness += (buffer.get(i).toInt() and 0xFF)
             }
@@ -210,7 +210,7 @@ class MotionDetectorModule(reactContext: ReactApplicationContext) :
                 val diff = kotlin.math.abs(brightness - lastBrightness)
                 // Seuil ultra-sensible : même un petit mouvement de main sera détecté
                 val threshold = (100 - sensitivity) * 0.5
-                
+
                 if (diff > threshold) {
                     Log.d(TAG, "Motion detected! diff=$diff, threshold=$threshold, brightness=$brightness")
                     sendEvent("onMotionDetected", null)

@@ -12,7 +12,7 @@ import com.facebook.react.bridge.ReactMethod
 import java.io.File
 
 class PermissionsModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-    
+
     override fun getName(): String {
         return "PermissionsModule"
     }
@@ -48,17 +48,17 @@ class PermissionsModule(reactContext: ReactApplicationContext) : ReactContextBas
     fun testVideoAccess(path: String, promise: Promise) {
         try {
             val file = File(path)
-            
+
             if (!file.exists()) {
                 promise.reject("NOT_FOUND", "Le fichier n'existe pas: $path")
                 return
             }
-            
+
             if (!file.canRead()) {
                 promise.reject("NO_PERMISSION", "Pas de permission pour lire: $path")
                 return
             }
-            
+
             val length = file.length()
             promise.resolve("✅ Fichier accessible - Taille: ${length / 1024} KB")
         } catch (e: Exception) {
@@ -70,30 +70,30 @@ class PermissionsModule(reactContext: ReactApplicationContext) : ReactContextBas
     fun listVideosInFolder(folderPath: String, promise: Promise) {
         try {
             val folder = File(folderPath)
-            
+
             if (!folder.exists()) {
                 promise.reject("NOT_FOUND", "Dossier introuvable: $folderPath")
                 return
             }
-            
+
             if (!folder.isDirectory) {
                 promise.reject("NOT_DIR", "Ce n'est pas un dossier: $folderPath")
                 return
             }
-            
+
             val videoFiles = folder.listFiles { file ->
                 file.extension.lowercase() in listOf("mp4", "mov", "avi", "mkv", "webm")
             }
-            
+
             if (videoFiles == null) {
                 promise.reject("NO_PERMISSION", "Impossible de lire le contenu du dossier")
                 return
             }
-            
-            val fileList = videoFiles.joinToString("\n") { 
+
+            val fileList = videoFiles.joinToString("\n") {
                 "${it.name} (${it.length() / 1024} KB)"
             }
-            
+
             promise.resolve("Trouvé ${videoFiles.size} vidéo(s):\n$fileList")
         } catch (e: Exception) {
             promise.reject("ERROR", e.message)
