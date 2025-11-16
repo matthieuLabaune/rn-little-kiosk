@@ -17,6 +17,9 @@ class MainApplication : Application(), ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // add(MyReactNativePackage())
           add(MotionDetectorPackage()) // Module natif pour détection de mouvement
+          add(VideoScannerPackage()) // Module natif pour scanner les vidéos
+          add(FileImporterPackage()) // Module natif pour importer les vidéos
+          add(PermissionsPackage()) // Module natif pour gérer les permissions
         },
     )
   }
