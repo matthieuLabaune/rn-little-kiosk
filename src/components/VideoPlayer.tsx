@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import {StyleSheet, View, Dimensions} from 'react-native';
 import Video from 'react-native-video';
 
@@ -8,6 +8,7 @@ interface VideoPlayerProps {
   videoSource: string | {uri: string};
   isActive: boolean;
   onEnd?: () => void;
+  playKey?: string;
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
@@ -15,9 +16,21 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   isActive,
   onEnd,
 }) => {
+  const videoRef = useRef<any>(null);
+  const wasActiveRef = useRef(isActive);
+
+  useEffect(() => {
+    // Si la vidéo passe de inactive à active, la remettre au début
+    if (!wasActiveRef.current && isActive && videoRef.current) {
+      videoRef.current.seek(0);
+    }
+    wasActiveRef.current = isActive;
+  }, [isActive]);
+
   return (
     <View style={styles.container}>
       <Video
+        ref={videoRef}
         source={
           typeof videoSource === 'string' ? {uri: videoSource} : videoSource
         }
