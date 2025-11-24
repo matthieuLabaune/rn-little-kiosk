@@ -20,6 +20,7 @@ class MainApplication : Application(), ReactApplication {
           add(VideoScannerPackage()) // Module natif pour scanner les vidéos
           add(FileImporterPackage()) // Module natif pour importer les vidéos
           add(PermissionsPackage()) // Module natif pour gérer les permissions
+          add(KioskPackage()) // Module natif Kiosk (Lock Task)
         },
     )
   }
